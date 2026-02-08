@@ -1,0 +1,60 @@
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
+go.work.sum
+
+# Binaries
+bin/
+dist/
+
+# Dependency directories
+vendor/
+
+# Log files
+*.log
+
+# IDE
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Node.js (frontend)
+node_modules/
+.next/
+.nuxt/
+.output/
+.cache/
+*.tsbuildinfo
+
+# Build outputs
+build/
+out/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+*.swp
+*.swo
+*~
