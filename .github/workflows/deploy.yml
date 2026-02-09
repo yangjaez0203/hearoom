@@ -1,0 +1,76 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - 'backend/v*'
+      - 'frontend/v*'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    outputs:
+      service: ${{ steps.detect.outputs.service }}
+      version: ${{ steps.detect.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify prod branch
+        run: |
+          git branch --contains "${{ github.sha }}" | grep -q 'prod' \
+            || (echo "::error::Tag must be on prod branch" && exit 1)
+
+      - name: Detect service
+        id: detect
+        run: |
+          TAG="${{ github.ref_name }}"
+          SERVICE="${TAG%%/v*}"
+          VERSION="${TAG#*/}"
+          echo "service=$SERVICE" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build backend
+        if: needs.verify.outputs.service == 'backend'
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Test backend
+        if: needs.verify.outputs.service == 'backend'
+        working-directory: backend
+        run: |
+          go build ./cmd/server
+          go test ./...
+
+      - name: Build frontend
+        if: needs.verify.outputs.service == 'frontend'
+        working-directory: frontend
+        run: echo "Frontend build not configured yet"
+
+      - name: Build Docker image
+        run: docker compose build ${{ needs.verify.outputs.service }}
+
+  deploy:
+    needs: [verify, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /app/hearoom
+            git fetch --tags
+            git checkout ${{ github.ref_name }}
+            docker compose up --build -d ${{ needs.verify.outputs.service }}
