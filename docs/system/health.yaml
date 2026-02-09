@@ -1,0 +1,16 @@
+tags:
+  - system
+summary: /health
+description: Retrieve the current health status of the Hearoom system.
+operationId: getSystemHealth
+responses:
+  '200':
+    description: Successful response with system health status
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: "ok"

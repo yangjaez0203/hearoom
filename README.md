@@ -41,4 +41,7 @@ cd backend && go run cmd/server/main.go
 
 # Health check
 curl http://localhost:8080/health
+
+# API 문서 미리보기 (포트 4000)
+npx @redocly/cli preview -p 4000
 ```

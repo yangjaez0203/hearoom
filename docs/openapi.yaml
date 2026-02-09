@@ -1,0 +1,13 @@
+openapi: 3.0.0
+info:
+  title: Hearoom API
+  version: 1.0.0
+servers:
+  - url: https://localhost:8080 # TODO Update
+tags:
+  - name: system
+    description: System related endpoints
+paths:
+  /health:
+    get:
+      $ref: './system/health.yaml'
