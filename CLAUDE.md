@@ -60,9 +60,16 @@ npx @redocly/cli preview -p 4000
 - **Backend:** Go 1.25, Fiber v2, UUID
 - **Frontend:** TBD
 
-## CI
+## CI/CD
 
-- PR 오픈 시 변경 경로 기반 조건부 빌드 (`.github/workflows/pr-check.yml`)
+### PR Check (`.github/workflows/pr-check.yml`)
+- PR 오픈 시 변경 경로 기반 조건부 빌드
 - `backend/**` → Go 빌드 + 테스트
 - `docs/**` → Redocly lint + 문서 빌드
 - `frontend/**` → 미설정 (프레임워크 선택 후 추가)
+
+### Deploy (`.github/workflows/deploy.yml`)
+- prod 브랜치에서 서비스별 태그 push 시 배포
+- 태그 형식: `backend/v1.0.0`, `frontend/v1.0.0`
+- 파이프라인: verify (prod 브랜치 검증) → build (빌드 + 테스트) → deploy (SSH)
+- 서버 경로: `/hearoom`
