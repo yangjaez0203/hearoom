@@ -45,3 +45,10 @@ cd backend && gofmt -w .
 
 - **Backend:** Go 1.25, Fiber v2, UUID
 - **Frontend:** TBD
+
+## CI
+
+- PR 오픈 시 변경 경로 기반 조건부 빌드 (`.github/workflows/pr-check.yml`)
+- `backend/**` → Go 빌드 + 테스트
+- `docs/**` → Redocly lint + 문서 빌드
+- `frontend/**` → 미설정 (프레임워크 선택 후 추가)
