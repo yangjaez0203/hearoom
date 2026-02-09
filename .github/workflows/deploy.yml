@@ -70,7 +70,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /app/hearoom
+            cd /hearoom
             git fetch --tags
             git checkout ${{ github.ref_name }}
             docker compose up --build -d ${{ needs.verify.outputs.service }}
