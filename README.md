@@ -32,15 +32,24 @@
 |-------|-------|
 | Backend | Go, Fiber v2 |
 | Frontend | TBD |
+| Proxy | Nginx |
+| Infra | Docker Compose |
 
 ## Getting Started
 
 ```bash
-# 백엔드 실행
-cd backend && go run cmd/server/main.go
+# Docker Compose로 전체 실행
+docker compose up --build -d
 
 # Health check
-curl http://localhost:8080/health
+curl http://localhost/api/health
+```
+
+### 개별 실행
+
+```bash
+# 백엔드만 실행
+cd backend && go run cmd/server/main.go
 
 # API 문서 미리보기 (포트 4000)
 npx @redocly/cli preview -p 4000
