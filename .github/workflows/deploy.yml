@@ -19,9 +19,14 @@ jobs:
 
       - name: Verify prod branch
         run: |
-          git branch --contains "${{ github.sha }}" | grep -q 'prod' \
-            || (echo "::error::Tag must be on prod branch" && exit 1)
+          # Ensure we have the remote prod branch reference
+          git fetch origin prod:refs/remotes/origin/prod --depth=1
 
+          # Verify that the tag commit is reachable from origin/prod
+          if ! git merge-base --is-ancestor "${{ github.sha }}" origin/prod; then
+            echo "::error::Tag must be on prod branch"
+            exit 1
+          fi
       - name: Detect service
         id: detect
         run: |
