@@ -1,6 +1,6 @@
 module github.com/yangjaez0203/hearoom/backend
 
-go 1.25.6
+go 1.25.7
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
