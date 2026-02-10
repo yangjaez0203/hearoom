@@ -46,7 +46,7 @@ jobs:
         if: needs.verify.outputs.service == 'backend'
         uses: actions/setup-go@v5
         with:
-          go-version: '1.25'
+          go-version: '1.25.6'
 
       - name: Test backend
         if: needs.verify.outputs.service == 'backend'
