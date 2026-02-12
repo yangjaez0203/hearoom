@@ -66,15 +66,25 @@ jobs:
   deploy:
     needs: [verify, build]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
+          role-to-assume: arn:aws:iam::727014823495:role/hearoom-deployer-role
+          aws-region: ap-northeast-2
+
+      - name: Deploy via SSM
+        uses: peterkimzz/aws-ssm-send-command@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+          aws-region: ap-northeast-2
+          instance-ids: ${{ secrets.INSTANCE_ID }}
+          command: |
             cd /hearoom
             git fetch --tags
             git checkout ${{ github.ref_name }}
