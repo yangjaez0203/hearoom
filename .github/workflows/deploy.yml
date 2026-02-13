@@ -81,7 +81,7 @@ jobs:
           COMMAND_ID=$(aws ssm send-command \
             --instance-ids "${{ secrets.INSTANCE_ID }}" \
             --document-name "AWS-RunShellScript" \
-            --parameters 'commands=["cd /home/ubuntu/hearoom && git fetch --tags && git checkout ${{ github.ref_name }} && docker compose up --build -d ${{ needs.verify.outputs.service }}"]' \
+            --parameters 'commands=["git config --global --add safe.directory /home/ubuntu/hearoom && cd /home/ubuntu/hearoom && git fetch --tags && git checkout ${{ github.ref_name }} && docker compose up --build -d ${{ needs.verify.outputs.service }}"]' \
             --region ap-northeast-2 \
             --query "Command.CommandId" \
             --output text)
