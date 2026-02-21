@@ -12,11 +12,15 @@ services:
   backend:
     build:
       context: ./backend
+    env_file:
+      - ./backend/.env
     expose:
       - "8080"
 
   frontend:
     build:
       context: ./frontend
+    env_file:
+      - ./frontend/.env
     expose:
       - "3000"
