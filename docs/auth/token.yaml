@@ -1,0 +1,32 @@
+tags:
+  - auth
+summary: 비회원 토큰 발급
+description: |
+  새 비회원 유저를 생성하고 JWT 토큰을 발급합니다.
+
+  - 클라이언트가 토큰을 보유하고 있지 않을 때 호출합니다
+  - 발급받은 토큰을 이후 요청의 `Authorization: Bearer <token>` 헤더에 사용합니다
+  - 토큰 만료 시 다시 호출하여 새 토큰을 발급받습니다
+operationId: createToken
+security: []
+responses:
+  '200':
+    description: 비회원 유저 생성 및 토큰 발급 성공
+    content:
+      application/json:
+        schema:
+          $ref: '../openapi.yaml#/components/schemas/TokenResponse'
+        example:
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          user:
+            id: "550e8400-e29b-41d4-a716-446655440000"
+            username: "즐거운고양이42"
+            anonymous: true
+  '500':
+    description: 토큰 생성 실패
+    content:
+      application/json:
+        schema:
+          $ref: '../openapi.yaml#/components/schemas/Error'
+        example:
+          error: "failed to generate token"

@@ -3,6 +3,7 @@ tags:
 summary: /health
 description: Retrieve the current health status of the Hearoom system.
 operationId: getSystemHealth
+security: []
 responses:
   '200':
     description: Successful response with system health status

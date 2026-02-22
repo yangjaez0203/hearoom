@@ -1,0 +1,31 @@
+tags:
+  - users
+summary: /me
+description: |
+  현재 유저의 정보를 반환합니다.
+
+  - `Authorization: Bearer <token>` 헤더에 유효한 JWT가 필요합니다
+  - 토큰이 없거나 만료된 경우 401 응답을 반환합니다
+  - 토큰은 `POST /auth/token`으로 발급받을 수 있습니다
+operationId: getMe
+security:
+  - BearerAuth: []
+responses:
+  '200':
+    description: 현재 유저 정보
+    content:
+      application/json:
+        schema:
+          $ref: '../openapi.yaml#/components/schemas/User'
+        example:
+          id: "550e8400-e29b-41d4-a716-446655440000"
+          username: "즐거운고양이42"
+          anonymous: true
+  '401':
+    description: 토큰 없음 또는 유효하지 않음
+    content:
+      application/json:
+        schema:
+          $ref: '../openapi.yaml#/components/schemas/Error'
+        example:
+          error: "missing or invalid token"

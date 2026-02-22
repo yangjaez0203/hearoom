@@ -12,6 +12,7 @@ go.work.sum
 # Binaries
 bin/
 dist/
+backend/server
 
 # Dependency directories
 vendor/
