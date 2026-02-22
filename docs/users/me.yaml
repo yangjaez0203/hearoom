@@ -4,43 +4,28 @@ summary: /me
 description: |
   현재 유저의 정보를 반환합니다.
 
-  - `Authorization: Bearer <token>` 헤더에 유효한 JWT가 있으면 해당 유저 정보를 반환
-  - 토큰이 없거나 만료된 경우 새 비회원 유저가 자동 생성되며, 응답 헤더 `X-Token`에 새 JWT가 포함됩니다
-  - 클라이언트는 `X-Token` 값을 저장한 뒤 이후 요청의 `Authorization` 헤더에 사용해야 합니다
+  - `Authorization: Bearer <token>` 헤더에 유효한 JWT가 필요합니다
+  - 토큰이 없거나 만료된 경우 401 응답을 반환합니다
+  - 토큰은 `POST /auth/token`으로 발급받을 수 있습니다
 operationId: getMe
 security:
   - BearerAuth: []
-  - {} # 토큰 없이도 호출 가능 (비회원 자동 생성)
 responses:
   '200':
     description: 현재 유저 정보
-    headers:
-      X-Token:
-        description: 새로 발급된 JWT 토큰 (비회원 자동 생성 시에만 포함)
-        schema:
-          type: string
     content:
       application/json:
         schema:
           $ref: '../openapi.yaml#/components/schemas/User'
-        examples:
-          first-visit:
-            summary: 최초 방문 (토큰 없음 → 비회원 자동 생성, X-Token 헤더 포함)
-            value:
-              id: "550e8400-e29b-41d4-a716-446655440000"
-              username: "즐거운고양이42"
-              anonymous: true
-          returning:
-            summary: 재방문 (발급받은 토큰을 Authorization에 포함 → 기존 유저 식별)
-            value:
-              id: "550e8400-e29b-41d4-a716-446655440000"
-              username: "즐거운고양이42"
-              anonymous: true
-  '500':
-    description: 토큰 생성 실패
+        example:
+          id: "550e8400-e29b-41d4-a716-446655440000"
+          username: "즐거운고양이42"
+          anonymous: true
+  '401':
+    description: 토큰 없음 또는 유효하지 않음
     content:
       application/json:
         schema:
           $ref: '../openapi.yaml#/components/schemas/Error'
         example:
-          error: "failed to generate token"
+          error: "missing or invalid token"
