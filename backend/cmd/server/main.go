@@ -28,6 +28,7 @@ func main() {
 		})
 	})
 
+	app.Post("/auth/token", handlers.CreateToken(cfg))
 	app.Get("/me", handlers.GetMe)
 
 	// Start server
